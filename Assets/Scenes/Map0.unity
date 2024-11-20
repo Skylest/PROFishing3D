@@ -383,6 +383,12 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!4 &321632233 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6814963374011469254, guid: 11ee164ecf6c3df44bc334194f400918,
+    type: 3}
+  m_PrefabInstance: {fileID: 1671336595}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -1448,7 +1454,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 50, y: 0, z: 50}
+  m_Size: {x: 3, y: 0, z: 3}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1195873116
 GameObject:
@@ -2395,6 +2401,41 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: fisherman
+      objectReference: {fileID: 0}
+    - target: {fileID: 6420202781215432129, guid: 11ee164ecf6c3df44bc334194f400918,
+        type: 3}
+      propertyPath: m_Effectors.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6420202781215432129, guid: 11ee164ecf6c3df44bc334194f400918,
+        type: 3}
+      propertyPath: m_Effectors.Array.data[0].m_Visible
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6420202781215432129, guid: 11ee164ecf6c3df44bc334194f400918,
+        type: 3}
+      propertyPath: m_Effectors.Array.data[0].m_Transform
+      value: 
+      objectReference: {fileID: 321632233}
+    - target: {fileID: 6420202781215432129, guid: 11ee164ecf6c3df44bc334194f400918,
+        type: 3}
+      propertyPath: m_Effectors.Array.data[0].m_Style.size
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6420202781215432129, guid: 11ee164ecf6c3df44bc334194f400918,
+        type: 3}
+      propertyPath: m_Effectors.Array.data[0].m_Style.shape
+      value: 
+      objectReference: {fileID: 4300000, guid: c6793350c150f456688e39a81f97364a, type: 2}
+    - target: {fileID: 6420202781215432129, guid: 11ee164ecf6c3df44bc334194f400918,
+        type: 3}
+      propertyPath: m_Effectors.Array.data[0].m_Style.color.a
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6420202781215432129, guid: 11ee164ecf6c3df44bc334194f400918,
+        type: 3}
+      propertyPath: m_Effectors.Array.data[0].m_Style.color.r
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6814963374011469254, guid: 11ee164ecf6c3df44bc334194f400918,
         type: 3}
