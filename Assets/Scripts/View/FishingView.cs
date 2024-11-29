@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class FishingView : MonoBehaviour
 {
-    [SerializeField] RodAnimation rod;
+    [SerializeField] private RodAnimation rod;
 
-    [SerializeField] HookAnimation hook;    
+    [SerializeField] private HookAnimation hook;    
 
     //TODO Когдя тянем то смещаем влево или вправо. Частота смены стороны смещения. Поражение. Рестарт. Победа. Детекция земли. Разрешено ли сюда забросить.
     private void Start()
@@ -13,17 +13,19 @@ public class FishingView : MonoBehaviour
         GlobalData.gameState.OnValueChanged += StopFishing;
     }
 
-    public void Hook(Vector3 escapeVector, float fishSpeed)
+    public void Hook(Vector3 fishNewPosition, float speed, int rodDirection)
     {
-        Vector3 target = transform.position;
-        target.y = hook.transform.position.y;
-        hook.transform.position = Vector3.MoveTowards(hook.transform.position, target, fishSpeed * Time.deltaTime);
+        rod.HolderSpeed = speed;
+       // Vector3 target = transform.position;
+       // target.y = hook.transform.position.y;
+       // hook.transform.position = Vector3.MoveTowards(hook.transform.position, target, fishSpeed * Time.deltaTime);
     }
 
-    public void Hold(Vector3 escapeVector, float fishSpeed)
+    public void LetGo(Vector3 fishNewPosition, float speed)
     {
-        escapeVector.y = hook.transform.position.y;
-        hook.transform.position = Vector3.MoveTowards(hook.transform.position, escapeVector, fishSpeed * Time.deltaTime);
+        rod.HolderSpeed = speed;
+        //escapeVector.y = hook.transform.position.y;
+        //hook.transform.position = Vector3.MoveTowards(hook.transform.position, escapeVector, fishSpeed * Time.deltaTime);
     }    
 
     public void ThrowHook(Vector3 hookPos, float waitTime)

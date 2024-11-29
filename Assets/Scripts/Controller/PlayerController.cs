@@ -89,14 +89,18 @@ public class PlayerController : MonoBehaviour
             case GlobalData.FishingStates.Hooking:
                 if (GetActionStatus(ActionStatus.Hold))
                 {
-                    // fishingView.Hook(fishingModel.GetEscapePoint(fishingView.transform));
+                    Vector3 currentPosition = GetActionPosition();
+                    float deltaX = currentPosition.x - initialTouchPosition.x;
+                    int direction = Mathf.Abs(deltaX) > 15f ? (int)Mathf.Sign(deltaX) : 0;
+
+
+                    fishingView.Hook(fishingModel.GetEscapePoint(fishingView.transform), 10f, direction);
                     isFishingUp = false;
                 }
 
-                if (isFishingUp)
-                {
-                    // fishingView.Hold(fishingModel.GetEscapePoint(fishingView.transform));
-                }
+                if (isFishingUp)                
+                    fishingView.LetGo(fishingModel.GetEscapePoint(fishingView.transform), 15f);
+                
                 if (GetActionStatus(ActionStatus.Up))
                     isFishingUp = true;
                 break;
