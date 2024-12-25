@@ -1,18 +1,16 @@
-﻿using System.Collections;
-using Unity.Burst.CompilerServices;
-using UnityEngine;
+﻿using UnityEngine;
+using static GlobalEnums;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private FishingView fishingView;
-
-    private FishingModel fishingModel;
+    [SerializeField] private FishingView fishingView;    
 
     [SerializeField] private PlayerMover playerMover;
 
+    private FishingModel fishingModel;
+
     private bool isDragging = false, isFishingUp = false;
     private Vector3 initialTouchPosition;
-    private float waitTime = 0;
 
     /// <summary>
     /// Статус действия с объектом
@@ -31,13 +29,12 @@ public class PlayerController : MonoBehaviour
     //Еще сделать хэппи аурс чтоб в начале только по центру было. Рандомное время
     private void Start()
     {
-        fishingModel = new FishingModel();
-        GlobalData.FishingState.OnValueChanged += CheckCoroutine;
+        fishingModel = new FishingModel();        
     }
 
     private void Update()
     {
-        if (GlobalData.gameState.Value != GlobalData.GameStates.Gameplay)
+        if (GlobalData.gameState.Value != GameStates.Gameplay)
             return;
 
         if (GetActionStatus(ActionStatus.Down))
@@ -45,7 +42,7 @@ public class PlayerController : MonoBehaviour
 
         switch (GlobalData.FishingState.Value)
         {
-            case GlobalData.FishingStates.WaitThrowing:
+            case FishingStates.WaitThrowing:
                 if (GetActionStatus(ActionStatus.Down))
                 {
                     playerMover.SetStartPosition(initialTouchPosition);
@@ -73,7 +70,7 @@ public class PlayerController : MonoBehaviour
                             if (hit.collider.CompareTag("Water"))
                             {
                                 FishWrapper fish = fishingModel.PrepareFish(out float time);
-                                fishingView.ThrowHook(hit.point, time);
+                                fishingView.ThrowHook(hit.point, fish, time);
                                 playerMover.LookAtPoint(hit.point);
                             }
                     }
@@ -81,25 +78,28 @@ public class PlayerController : MonoBehaviour
                 }
                 break;
 
-            case GlobalData.FishingStates.FishOnHook:
+            case FishingStates.FishOnHook:
                 if (GetActionStatus(ActionStatus.Down))
                     fishingView.StartFishing();
                 break;
 
-            case GlobalData.FishingStates.Hooking:
+            case FishingStates.Hooking:
                 if (GetActionStatus(ActionStatus.Hold))
                 {
                     Vector3 currentPosition = GetActionPosition();
                     float deltaX = currentPosition.x - initialTouchPosition.x;
-                    int direction = Mathf.Abs(deltaX) > 15f ? (int)Mathf.Sign(deltaX) : 0;
 
+                    int direction = 0;
 
-                    fishingView.Hook(fishingModel.GetEscapePoint(fishingView.transform), 10f, direction);
+                    if (Mathf.Abs(deltaX) >= 75f)                    
+                        direction = (int)Mathf.Sign(deltaX);
+                    
+                    fishingView.Hook(direction);
                     isFishingUp = false;
                 }
 
                 if (isFishingUp)                
-                    fishingView.LetGo(fishingModel.GetEscapePoint(fishingView.transform), 15f);
+                    fishingView.LetGo();
                 
                 if (GetActionStatus(ActionStatus.Up))
                     isFishingUp = true;
@@ -115,21 +115,6 @@ public class PlayerController : MonoBehaviour
     public void PrepareLocationConfig(int locNum)
     {
         fishingModel.PrepareLocationConfig(locNum);
-    }
-
-    private void CheckCoroutine()
-    {
-        if (GlobalData.FishingState.Value == GlobalData.FishingStates.Hooking)
-            StartCoroutine(ChangeEscapeVector());
-        else
-            StopCoroutine(ChangeEscapeVector());
-    }
-
-    private IEnumerator ChangeEscapeVector()
-    {
-        fishingModel.ChangeEscapeVector();
-        waitTime = Random.Range(1f, 10f);
-        yield return new WaitForSecondsRealtime(waitTime);
     }
 
     /// <summary>

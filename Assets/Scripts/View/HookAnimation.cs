@@ -1,6 +1,7 @@
 ﻿using DG.Tweening;
 using System.Collections;
 using UnityEngine;
+using static GlobalEnums;
 
 public class HookAnimation : MonoBehaviour
 {
@@ -33,7 +34,7 @@ public class HookAnimation : MonoBehaviour
 
         switch (GlobalData.FishingState.Value)
         {
-            case GlobalData.FishingStates.WaitingFish:
+            case FishingStates.WaitingFish:
 
                 sequenceRotate.Append(transform.DORotate(new Vector3(DefoltRotationBounds, 0, 0), GlobalData.animationFishOnHookTime * 5))
                               .SetLoops(-1, LoopType.Yoyo);
@@ -47,7 +48,7 @@ public class HookAnimation : MonoBehaviour
 
                 break;
 
-            case GlobalData.FishingStates.FishOnHook:
+            case FishingStates.FishOnHook:
                 sequenceRotate.Append(transform.DORotate(Vector3.zero, GlobalData.animationFishOnHookTime))
                               .Join(transform.DOMoveY(DefoltYPos, GlobalData.animationFishOnHookTime));
 
@@ -60,7 +61,7 @@ public class HookAnimation : MonoBehaviour
                         .SetDelay(GlobalData.animationFishOnHookTime);
                 break;
 
-            case GlobalData.FishingStates.Hooking:
+            case FishingStates.Hooking:
                 transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position);
 
                 sequenceRotate.Append(transform.DORotateQuaternion(GetRotationWithTilt(), GlobalData.animationFishOnHookTime / 2))
@@ -82,7 +83,7 @@ public class HookAnimation : MonoBehaviour
 
     private IEnumerator LookAtCamera()
     {
-        while (GlobalData.FishingState.Value == GlobalData.FishingStates.Hooking)
+        while (GlobalData.FishingState.Value == FishingStates.Hooking)
         {
             cameraTween?.Kill();
             transform.rotation = GetRotationWithTilt();

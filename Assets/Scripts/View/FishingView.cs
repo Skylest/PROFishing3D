@@ -1,55 +1,93 @@
 using System.Collections;
 using UnityEngine;
+using static GlobalEnums;
 
 public class FishingView : MonoBehaviour
 {
     [SerializeField] private RodAnimation rod;
 
-    [SerializeField] private HookAnimation hook;    
+    private FishWrapper currentFish;
 
-    //TODO Когдя тянем то смещаем влево или вправо. Частота смены стороны смещения. Поражение. Рестарт. Победа. Детекция земли. Разрешено ли сюда забросить.
+    //TODO а шо если слишком близко??? Имба получается. А вдали нереально
+    private const float DistanceFromPlayer = 100f;
+    private const float EscapeDistanceFromPlayer = 110f;
+    private const float SectorAngle = 80f;
+    private Vector3 escapeVector;
+
+    public Vector3 GetEscapePoint(Transform player)
+    {
+        Vector3 forward = player.forward;
+
+        float randomAngle = Random.Range(-SectorAngle / 2, SectorAngle / 2);
+
+        Vector3 escapeDirection = Quaternion.Euler(0, randomAngle, 0) * forward;
+
+        Vector3 escapePoint = player.position + escapeDirection.normalized * DistanceFromPlayer;
+
+        return escapePoint;
+    }
+
+    //TODO Частота смены стороны смещения. Поражение. Рестарт. Победа. Детекция земли. Разрешено ли сюда забросить. Разрешено ли туда плыть (я думаю проверять попадает ли луч
+    // от игрока до поплавка или стыкается еще с чем-то)
     private void Start()
     {
         GlobalData.gameState.OnValueChanged += StopFishing;
     }
 
-    public void Hook(Vector3 fishNewPosition, float speed, int rodDirection)
+    public void Hook(int rodDirection)
     {
-        rod.HolderSpeed = speed;
+        float speed = 10f;
+        rod.SetHookingRotation(speed, rodDirection);
        // Vector3 target = transform.position;
        // target.y = hook.transform.position.y;
        // hook.transform.position = Vector3.MoveTowards(hook.transform.position, target, fishSpeed * Time.deltaTime);
     }
 
-    public void LetGo(Vector3 fishNewPosition, float speed)
+    public void LetGo()
     {
-        rod.HolderSpeed = speed;
+        float speed = -15f;
+        rod.SetDefoltRotation(speed);
         //escapeVector.y = hook.transform.position.y;
         //hook.transform.position = Vector3.MoveTowards(hook.transform.position, escapeVector, fishSpeed * Time.deltaTime);
     }    
 
-    public void ThrowHook(Vector3 hookPos, float waitTime)
+    public void ThrowHook(Vector3 hookPos, FishWrapper fish, float waitTime)
     {
-        GlobalData.FishingState.Value = GlobalData.FishingStates.WaitingFish;
-        hook.SetPosition(hookPos);
-        
+        GlobalData.FishingState.Value = FishingStates.WaitingFish;
+        currentFish = fish;
+        rod.ThrowAnimation(hookPos);
         StartCoroutine(WaitingFish(waitTime));
     }
 
     public void StartFishing()
     {
-        GlobalData.FishingState.Value = GlobalData.FishingStates.Hooking;
+        GlobalData.FishingState.Value = FishingStates.Hooking;
     }
 
     public void StopFishing()
     {
-        hook.SetPosition(new Vector3(0, -100, 0));
-        GlobalData.FishingState.Value = GlobalData.FishingStates.WaitThrowing;
+        rod.SetDefoltRotation();
+        GlobalData.FishingState.Value = FishingStates.WaitThrowing;
     }
 
     private IEnumerator WaitingFish(float waitingTime)
     {
         yield return new WaitForSecondsRealtime(waitingTime);
-        GlobalData.FishingState.Value = GlobalData.FishingStates.FishOnHook;
+        GlobalData.FishingState.Value = FishingStates.FishOnHook;
+    }
+
+    private IEnumerator ChangeEscapeVector()
+    {
+       // fishingModel.ChangeEscapeVector();
+        float waitTime = Random.Range(1f, 10f);
+        yield return new WaitForSecondsRealtime(waitTime);
+    }
+
+    private void CheckCoroutine()
+    {
+        if (GlobalData.FishingState.Value == FishingStates.Hooking)
+            StartCoroutine(ChangeEscapeVector());
+        else
+            StopCoroutine(ChangeEscapeVector());
     }
 }

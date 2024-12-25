@@ -1,6 +1,6 @@
 ﻿using UnityEditor;
 
-[CustomEditor(typeof(FishScriptableObject))]
+[CustomEditor(typeof(Fish))]
 public class FishEditor : Editor
 {
     public override void OnInspectorGUI()

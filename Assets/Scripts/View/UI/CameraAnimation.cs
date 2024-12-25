@@ -1,5 +1,6 @@
 ﻿using DG.Tweening;
 using UnityEngine;
+using static GlobalEnums;
 
 public class CameraAnimation : MonoBehaviour
 {
@@ -32,7 +33,7 @@ public class CameraAnimation : MonoBehaviour
     {
         gameplayCamera.enabled = false;
         mapCamera.enabled = true;
-        GlobalData.gameState.Value = GlobalData.GameStates.Map;
+        GlobalData.gameState.Value = GameStates.Map;
 
         CanvasAnimate(menuCanvas, false);
         CanvasAnimate(gameplayCanvas, false);
@@ -65,7 +66,7 @@ public class CameraAnimation : MonoBehaviour
             {
                 gameplayCamera.enabled = true;
                 mapCamera.enabled = false;
-                GlobalData.gameState.Value = GlobalData.GameStates.Gameplay;
+                GlobalData.gameState.Value = GameStates.Gameplay;
             });
     }
 
@@ -74,7 +75,7 @@ public class CameraAnimation : MonoBehaviour
     /// </summary>
     public void MoveToMenu()
     {
-        GlobalData.gameState.Value = GlobalData.GameStates.Menu;
+        GlobalData.gameState.Value = GameStates.Menu;
 
         CanvasAnimate(menuCanvas, true);
         CanvasAnimate(mapCanvas, false);

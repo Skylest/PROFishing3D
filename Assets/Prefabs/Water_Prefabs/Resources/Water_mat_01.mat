@@ -69,7 +69,7 @@ Material:
         a: 0.9607843}
     - Color_93e06cd551a5449091bcde90b46765a0: {r: 0, g: 0.50980395, b: 0.42002845,
         a: 0.19607843}
-    - Vector2_4351ac2be1d74054986ec5378db9d578: {r: 17500, g: 17500, b: 0, a: 0}
+    - Vector2_4351ac2be1d74054986ec5378db9d578: {r: 820, g: 820, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &7450951484075934239
 MonoBehaviour:

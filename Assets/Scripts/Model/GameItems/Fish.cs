@@ -1,25 +1,16 @@
 ﻿using UnityEngine;
-using static IFish;
+using static GlobalEnums;
 
-[CreateAssetMenu(fileName = "Fish", menuName = "ScriptableObjects/Fish", order = 1)]
-public class FishScriptableObject : ScriptableObject, IFish
+[CreateAssetMenu(fileName = "Fish", menuName = "ScriptableObjects/Fishing/Fish", order = 1)]
+public class Fish : GameItem, IFish
 {
-    [Header("Fish Info")]
-    [SerializeField] private string fishName;
-    [SerializeField] private string fishDescription;
     private float speed;
     private float weight;
-    private FishRarity rarity;
-    private GameObject fishModel;
     private bool wasHooked;
     [SerializeField] private int hookProbability;
 
-    public string Name => fishName;
-    public string Description => fishDescription;
     public float Speed => speed;
     public float Weight => weight;
-    public FishRarity Rarity => rarity;
-    public GameObject FishModel => fishModel;
     public bool WasHooked { get => wasHooked; set => wasHooked = value; }
     public int HookProbability => hookProbability;
 
@@ -36,8 +27,8 @@ public class FishScriptableObject : ScriptableObject, IFish
     [SerializeField] private float maxWeight;
 
     [Header("Rarity Range")]
-    [SerializeField] private FishRarity minRarity;
-    [SerializeField] private FishRarity maxRarity;
+    [SerializeField] private ItemRarity minRarity;
+    [SerializeField] private ItemRarity maxRarity;
 
     public void RandomizeParameters()
     {
@@ -56,23 +47,20 @@ public class FishScriptableObject : ScriptableObject, IFish
         {            
             float growthProbabiluty = GetRarityGrowthProbabiluty();
             canGrowth = Random.value < growthProbabiluty;
-            if (canGrowth)
-            {
-                rarity += 1;
-                Debug.Log(rarity.ToString());
-            }
+            if (canGrowth)            
+                rarity += 1;            
         }
     }
 
-    private float GetRarityCoef(FishRarity fishRarity)
+    private float GetRarityCoef(ItemRarity fishRarity)
     {
         return fishRarity switch
         {
-            FishRarity.Common => 1f,
-            FishRarity.Uncommon => 1.25f,
-            FishRarity.Rare => 1.5f,
-            FishRarity.Mythical => 2f,
-            FishRarity.Legendary => 3f,
+            ItemRarity.Common => 1f,
+            ItemRarity.Uncommon => 1.25f,
+            ItemRarity.Rare => 1.5f,
+            ItemRarity.Mythical => 2f,
+            ItemRarity.Legendary => 3f,
             _ => 1f
         };
     }
@@ -81,11 +69,11 @@ public class FishScriptableObject : ScriptableObject, IFish
     {
         return rarity switch
         {
-            FishRarity.Common => 0.33f,
-            FishRarity.Uncommon => 0.2f,
-            FishRarity.Rare => 0.1f,
-            FishRarity.Mythical => 0.05f,
-            FishRarity.Legendary => 0f,
+            ItemRarity.Common => 0.33f,
+            ItemRarity.Uncommon => 0.2f,
+            ItemRarity.Rare => 0.1f,
+            ItemRarity.Mythical => 0.05f,
+            ItemRarity.Legendary => 0f,
             _ => 0f
         };
     }

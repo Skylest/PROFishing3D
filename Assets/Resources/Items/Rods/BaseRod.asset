@@ -9,17 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e14504b242f56364e83a5585f159cc16, type: 3}
-  m_Name: Fish
+  m_Script: {fileID: 11500000, guid: af2bade4d4b27dc409f5fdde38eab535, type: 3}
+  m_Name: BaseRod
   m_EditorClassIdentifier: 
   itemName: 
   itemDescription: 
-  model: {fileID: 0}
+  model: {fileID: 412090124883188085, guid: 65c61591445ed8245b88a9bd45165f5b, type: 3}
   rarity: 0
-  hookProbability: 0
-  minSpeed: 0
-  maxSpeed: 0
-  minWeight: 0
-  maxWeight: 0
-  minRarity: 0
-  maxRarity: 0
+  power: 60
